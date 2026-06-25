@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tensio Daily Build Progress</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #1d252d;
+      --muted: #5c6875;
+      --line: #d9dee5;
+      --accent: #0f766e;
+      --accent-soft: #d9f2ef;
+      --warning: #9a5b00;
+      --warning-soft: #fff3d6;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    header {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 1.05rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .stat {
+      display: grid;
+      gap: 6px;
+      min-height: 120px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: 1.35rem;
+      font-weight: 750;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .badge.warning {
+      color: var(--warning);
+      background: var(--warning-soft);
+    }
+
+    section {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #fbfcfd;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    code {
+      padding: 2px 5px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcfd;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 22px 14px 36px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        border-bottom: 1px solid var(--line);
+      }
+
+      tr:last-child {
+        border-bottom: 0;
+      }
+
+      td {
+        border-bottom: 0;
+        padding: 9px 12px;
+      }
+
+      td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="badge">Daily automation active</span>
+      <h1>Tensio Daily Build Progress</h1>
+      <p>Daily coding sessions plan one product improvement, delegate implementation work, verify the result, and update this tracker.</p>
+    </header>
+
+    <div class="grid" aria-label="Status summary">
+      <article class="panel stat">
+        <span class="label">Current state</span>
+        <span class="value">Entry workflow core shipped</span>
+        <p><code>TensioCore</code> now covers category rules, severe-reading guidance, and validated reading-entry workflow state.</p>
+      </article>
+      <article class="panel stat">
+        <span class="label">Cadence</span>
+        <span class="value">Daily at 09:00</span>
+        <p>Schedule uses Europe/Bucharest local time.</p>
+      </article>
+      <article class="panel stat">
+        <span class="label">Quality gate</span>
+        <span class="value">Feature + verification</span>
+        <p>Each session must leave evidence: files changed, tests or checks run, and next target.</p>
+      </article>
+    </div>
+
+    <section class="panel">
+      <h2>Operating Rules</h2>
+      <ul>
+        <li>Start each run by reading this file and inspecting the current project state.</li>
+        <li>Before choosing the day&apos;s slice, treat the Tensio MVP plan and original research as product source of truth. Use <code>/Users/andreibalu/CODE/learnings</code> and relevant <code>/Users/andreibalu/CODE/xcode/Ebooker</code> guidance only for reusable architecture, SwiftUI/SwiftData, tooling, App Store, and workflow patterns.</li>
+        <li>Write a short plan for the day before changing code.</li>
+        <li>Use subagents for independent implementation, research, review, or verification tasks when tools allow it.</li>
+        <li>Ship one coherent feature or product-quality improvement per day.</li>
+        <li>Run the strongest available verification for the touched stack.</li>
+        <li>Update this tracker with plan, shipped work, verification evidence, blockers, and next session target.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Daily Log</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Daily plan</th>
+            <th>Shipped</th>
+            <th>Changed files</th>
+            <th>Verification</th>
+            <th>Blockers</th>
+            <th>Next target</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- DAILY_LOG_START -->
+          <tr>
+            <td data-label="Date">2026-06-25</td>
+            <td data-label="Daily plan">Ship reading-entry workflow core on top of <code>TensioCore</code>: add input validation, save readiness rules, and guidance preview logic backed by automated tests before any SwiftUI shell work.</td>
+            <td data-label="Shipped"><code>ReadingEntryDraft</code>, <code>ReadingEntryValidation</code>, and <code>ReadingEntryPreview</code> added to guard impossible input, block reversed values, and surface deterministic clinical guidance before save.</td>
+            <td data-label="Changed files"><code>Sources/TensioCore/ReadingEntryDraft.swift</code>, <code>Tests/TensioCoreTests/ReadingEntryDraftTests.swift</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>swift test --filter ReadingEntryDraftTests</code> failed because <code>ReadingEntryDraft</code> did not exist. Green: same command passed 5/5 tests on 2026-06-25. Final: <code>swift test</code> passed 10/10 tests on 2026-06-25. Preview publish: required Tailscale script failed closed with <code>Tailscale unavailable. Refusing public tunnel fallback.</code></td>
+            <td data-label="Blockers">No product blocker. SwiftPM verification still needs unsandboxed execution because sandbox blocks Swift toolchain cache access. Private preview blocked because Tailscale CLI exists but local daemon is not running: <code>dial unix /var/run/tailscaled.socket: connect: no such file or directory</code>. Install/sign into Tailscale on Mac and phone, then start daemon before next run.</td>
+            <td data-label="Next target">Implement thin SwiftUI app shell and entry screen that bind directly to tested <code>ReadingEntryDraft</code> state.</td>
+          </tr>
+          <tr>
+            <td data-label="Date">2026-06-24</td>
+            <td data-label="Daily plan">Create first usable Tensio slice: scaffold <code>TensioCore</code>, add deterministic blood pressure categories plus severe-reading guidance, and verify with automated tests.</td>
+            <td data-label="Shipped"><code>TensioCore</code> package created with <code>BloodPressureCategory</code>, <code>BloodPressureReading</code>, and <code>ClinicalGuidance</code> for senior-facing category labels plus severe-reading escalation rules.</td>
+            <td data-label="Changed files"><code>Package.swift</code>, <code>Sources/TensioCore/BloodPressureCategory.swift</code>, <code>Sources/TensioCore/BloodPressureReading.swift</code>, <code>Sources/TensioCore/ClinicalGuidance.swift</code>, <code>Tests/TensioCoreTests/BloodPressureCategoryTests.swift</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>swift test</code> failed with category/guidance assertion mismatches. Green: <code>swift test --filter BloodPressureCategoryTests</code> passed 5 tests. Final: <code>swift test</code> passed 5/5 tests on 2026-06-24.</td>
+            <td data-label="Blockers">No code blocker. SwiftPM test runs need unsandboxed execution because sandbox blocks manifest cache access.</td>
+            <td data-label="Next target">Build first SwiftUI app shell and reading-entry screen on top of <code>TensioCore</code>.</td>
+          </tr>
+          <tr>
+            <td data-label="Date">2026-06-23</td>
+            <td data-label="Daily plan">Bootstrap automation and progress tracker.</td>
+            <td data-label="Shipped"><code>progress.html</code> tracker created.</td>
+            <td data-label="Changed files"><code>progress.html</code>.</td>
+            <td data-label="Verification">Tracker created and automation <code>daily-tensio-feature-build</code> activated.</td>
+            <td data-label="Blockers">None.</td>
+            <td data-label="Next target">First scheduled run chooses highest-value Tensio feature from current codebase.</td>
+          </tr>
+          <!-- DAILY_LOG_END -->
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Backlog</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Candidate</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- BACKLOG_START -->
+          <tr>
+            <td data-label="Priority">P1</td>
+            <td data-label="Candidate">Ship deterministic clinical core for categories and severe-reading guidance.</td>
+            <td data-label="Status"><span class="badge">Done</span></td>
+          </tr>
+          <tr>
+            <td data-label="Priority">P1</td>
+            <td data-label="Candidate">Ship validated reading-entry workflow core with save gating and guidance preview.</td>
+            <td data-label="Status"><span class="badge">Done</span></td>
+          </tr>
+          <tr>
+            <td data-label="Priority">P1</td>
+            <td data-label="Candidate">Build first SwiftUI app shell and reading-entry flow using <code>TensioCore</code>.</td>
+            <td data-label="Status"><span class="badge warning">Open</span></td>
+          </tr>
+          <!-- BACKLOG_END -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
