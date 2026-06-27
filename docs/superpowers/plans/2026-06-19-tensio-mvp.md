@@ -26,6 +26,7 @@
 - Medical safety: Tensio must not diagnose hypertension, prescribe treatment, or advise starting, stopping, or changing medication.
 - Clinical categories: use the American Heart Association patient-facing categories: normal `<120 and <80`, elevated `120-129 and <80`, stage 1 `130-139 or 80-89`, stage 2 `>=140 or >=90`, severe `>180 and/or >120`.
 - Severe reading flow: for `systolic > 180 or diastolic > 120`, show deterministic guidance to wait at least 1 minute, take another reading, ask about emergency symptoms, and show emergency-services guidance if symptoms are present.
+- Severe reading flow implementation detail: preserve an explicit unanswered emergency-symptom state in UI until user responds; never treat an unanswered state as "no symptoms."
 - Home monitoring protocol: 2 consecutive measurements at least 1 minute apart, twice daily morning and evening, for at least 4 days and ideally 7 days; discard day 1 when calculating the protocol average shown in reports.
 - Clinical source links for implementers and reviewers:
   - AHA categories and severe guidance: https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings

@@ -1,19 +1,79 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Doctor-ready summaries come after persisted readings." : {
+
+    },
+    "Diastolic" : {
+
+    },
+    "Enter values from cuff monitor. Tensio logs readings only. It does not measure blood pressure." : {
+
+    },
+    "Latest saved reading" : {
+
+    },
+    "Local-first, no-account defaults." : {
+
+    },
     "Log" : {
+
+    },
+    "Medicine tracking comes next." : {
 
     },
     "Medicines" : {
 
     },
+    "No warning symptoms" : {
+
+    },
+    "Next step: %@" : {
+
+    },
+    "Not selected" : {
+
+    },
+    "Preview" : {
+
+    },
+    "Pulse (optional)" : {
+
+    },
     "Report" : {
+
+    },
+    "Save reading" : {
+
+    },
+    "Saved readings" : {
+
+    },
+    "Saved readings will appear here after first entry." : {
+
+    },
+    "Saves this manual reading on device." : {
+
+    },
+    "Selected" : {
 
     },
     "Settings" : {
 
     },
+    "Symptoms present" : {
+
+    },
+    "Systolic" : {
+
+    },
     "Today" : {
+
+    },
+    "Today's reading" : {
+
+    },
+    "Warning symptoms right now?" : {
 
     }
   },

@@ -59,6 +59,17 @@ public struct ReadingEntryDraft: Equatable, Sendable {
         )
     }
 
+    public func guidance(emergencySymptomsPresent: Bool? = nil) -> ClinicalGuidance? {
+        guard let reading = makeReading() else {
+            return nil
+        }
+
+        return ClinicalGuidance.guidance(
+            for: reading,
+            emergencySymptomsPresent: emergencySymptomsPresent
+        )
+    }
+
     public func makeReading(recordedAt: Date = .now) -> BloodPressureReading? {
         guard validation.canSave else {
             return nil

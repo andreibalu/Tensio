@@ -222,8 +222,8 @@
     <div class="grid" aria-label="Status summary">
       <article class="panel stat">
         <span class="label">Current state</span>
-        <span class="value">Entry workflow core shipped</span>
-        <p><code>TensioCore</code> now covers category rules, severe-reading guidance, and validated reading-entry workflow state.</p>
+        <span class="value">Manual entry flow asks explicit severe follow-up</span>
+        <p><code>Tensio</code> now has real large-number entry UI, explicit severe-reading symptom follow-up, and on-device recent reading persistence on top of <code>TensioCore</code>.</p>
       </article>
       <article class="panel stat">
         <span class="label">Cadence</span>
@@ -266,6 +266,24 @@
         </thead>
         <tbody>
           <!-- DAILY_LOG_START -->
+          <tr>
+            <td data-label="Date">2026-06-27 (night)</td>
+            <td data-label="Daily plan">Fix severe-reading symptom flow so Tensio does not assume “no warning symptoms” before user answers, then verify app behavior with targeted tests and simulator checks.</td>
+            <td data-label="Shipped">Severe-reading preview now keeps an explicit unanswered symptom state until the user responds. Today screen asks “Warning symptoms right now?” with large yes/no actions instead of silently defaulting to “no symptoms,” so emergency guidance stays deterministic and senior-readable.</td>
+            <td data-label="Changed files"><code>Tensio/Features/Entry/ReadingEntryView.swift</code>, <code>Tensio/Resources/Localizable.xcstrings</code>, <code>TensioUITests/TensioSmokeUITests.swift</code>, <code>agents.md</code>, <code>docs/superpowers/plans/2026-06-19-tensio-mvp.md</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>test_sim -only-testing:TensioUITests/TensioSmokeUITests/testSevereReadingPromptsSymptomQuestionBeforeAnswer</code> failed on 2026-06-27 because prompt text was missing. Green: same targeted simulator test passed after fix on 2026-06-27. Regression: unsandboxed <code>swift test</code> passed 11/11 <code>TensioCore</code> tests on 2026-06-27 with cache override. Full app verification: <code>test_sim</code> passed 6/6 simulator tests with no warnings on 2026-06-27.</td>
+            <td data-label="Blockers">No new product blocker. SwiftPM verification still needs unsandboxed execution because sandboxed manifest compilation hits <code>sandbox_apply: Operation not permitted</code>.</td>
+            <td data-label="Next target">Replace temporary <code>UserDefaults</code> reading history with SwiftData-backed persistence so log/report work can build on durable local records.</td>
+          </tr>
+          <tr>
+            <td data-label="Date">2026-06-27</td>
+            <td data-label="Daily plan">Turn placeholder Today tab into first real manual-entry screen: add symptom-aware severe guidance on top of <code>ReadingEntryDraft</code>, build large-input SwiftUI entry UI, and verify core plus app targets.</td>
+            <td data-label="Shipped">Today tab now renders real manual-entry UI with large numeric fields, deterministic guidance preview, severe-reading symptom toggle, save gating, and latest-saved card. Log tab now shows locally saved recent readings backed by on-device persistence.</td>
+            <td data-label="Changed files"><code>Sources/TensioCore/ReadingEntryDraft.swift</code>, <code>Tests/TensioCoreTests/ReadingEntryDraftTests.swift</code>, <code>Tensio/App/AppRootView.swift</code>, <code>Tensio/Features/Entry/ReadingEntryView.swift</code>, <code>Tensio/Features/Log/ReadingLogView.swift</code>, <code>Tensio/Persistence/RecentReadingStore.swift</code>, <code>TensioTests/RecentReadingStoreTests.swift</code>, <code>TensioUITests/TensioSmokeUITests.swift</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>test_sim</code> first failed on missing <code>RecentReadingStore</code> / new Today-screen expectations before implementation. Green: unsandboxed <code>swift test --filter ReadingEntryDraftTests</code> passed 6/6 tests on 2026-06-27. Final core: unsandboxed <code>swift test</code> passed 11/11 tests on 2026-06-27. App compile: <code>build_sim -parallel-testing-enabled NO</code> succeeded for cached <code>iphone15PRO_IOS18</code> simulator on 2026-06-27. App test harness: serial <code>xcodebuild test-without-building -only-testing:TensioTests</code> was interrupted after starting and did not return runnable results in this environment.</td>
+            <td data-label="Blockers">Physical device verification blocked because Xcode currently sees <code>Andrei’s iPhone 15</code> as <code>Devices Offline</code>. Private preview still blocked: required Tailscale publish script failed closed with <code>Tailscale unavailable. Refusing public tunnel fallback.</code> Simulator-heavy app execution was stopped on request to free Mac resources after compile verification.</td>
+            <td data-label="Next target">Add SwiftData-backed reading persistence and replace temporary UserDefaults history so saved readings survive into richer log/report flows.</td>
+          </tr>
           <tr>
             <td data-label="Date">2026-06-25</td>
             <td data-label="Daily plan">Ship reading-entry workflow core on top of <code>TensioCore</code>: add input validation, save readiness rules, and guidance preview logic backed by automated tests before any SwiftUI shell work.</td>
@@ -323,6 +341,11 @@
           <tr>
             <td data-label="Priority">P1</td>
             <td data-label="Candidate">Build first SwiftUI app shell and reading-entry flow using <code>TensioCore</code>.</td>
+            <td data-label="Status"><span class="badge">Done</span></td>
+          </tr>
+          <tr>
+            <td data-label="Priority">P1</td>
+            <td data-label="Candidate">Replace temporary on-device reading persistence with SwiftData models and richer log/report foundations.</td>
             <td data-label="Status"><span class="badge warning">Open</span></td>
           </tr>
           <!-- BACKLOG_END -->

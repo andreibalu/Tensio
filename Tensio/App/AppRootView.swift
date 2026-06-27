@@ -2,21 +2,13 @@ import SwiftUI
 import TensioCore
 
 struct AppRootView: View {
+    @State private var savedReadings = RecentReadingStore().load()
+
     var body: some View {
         TabView {
             ForEach(MainTab.allCases) { tab in
                 NavigationStack {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text(tab.title)
-                            .font(.largeTitle.weight(.semibold))
-
-                        Text(statusCopy(for: tab))
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(24)
-                    .navigationTitle(tab.title)
+                    content(for: tab)
                 }
                 .tabItem {
                     Label(tab.title, systemImage: tab.systemImage)
@@ -25,19 +17,45 @@ struct AppRootView: View {
         }
     }
 
-    private func statusCopy(for tab: MainTab) -> String {
+    @ViewBuilder
+    private func content(for tab: MainTab) -> some View {
         switch tab {
         case .today:
-            "Ready for fast manual blood pressure entry."
+            ReadingEntryView(latestSavedReading: savedReadings.first) { reading in
+                savedReadings = RecentReadingStore().save(reading)
+            }
         case .log:
-            "Core category engine loaded: \(BloodPressureCategory.normal.title)."
+            ReadingLogView(savedReadings: savedReadings)
         case .medicines:
-            "Medicine tracking comes next."
+            placeholder(
+                title: "Medicines",
+                body: "Medicine tracking comes next."
+            )
         case .report:
-            "Doctor-ready summaries come after persisted readings."
+            placeholder(
+                title: "Report",
+                body: "Doctor-ready summaries come after persisted readings."
+            )
         case .settings:
-            "Local-first, no-account defaults."
+            placeholder(
+                title: "Settings",
+                body: "Local-first, no-account defaults."
+            )
         }
+    }
+
+    private func placeholder(title: LocalizedStringKey, body: LocalizedStringKey) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(title)
+                .font(.largeTitle.weight(.semibold))
+
+            Text(body)
+                .font(.body)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(24)
+        .navigationTitle(title)
     }
 }
 

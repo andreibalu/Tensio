@@ -35,6 +35,19 @@ final class ReadingEntryDraftTests: XCTestCase {
         XCTAssertEqual(draft.preview?.actionTitle, "Wait at least 1 minute and retake")
     }
 
+    func testGuidanceCanEscalateWhenEmergencySymptomsArePresent() {
+        let draft = ReadingEntryDraft(systolicText: "184", diastolicText: "121", pulseText: "88")
+
+        let followUpGuidance = draft.guidance(emergencySymptomsPresent: false)
+        let emergencyGuidance = draft.guidance(emergencySymptomsPresent: true)
+
+        XCTAssertEqual(followUpGuidance?.title, "Take another reading")
+        XCTAssertEqual(followUpGuidance?.action, "Wait at least 1 minute and retake")
+        XCTAssertEqual(emergencyGuidance?.title, "Emergency symptoms present")
+        XCTAssertEqual(emergencyGuidance?.action, "Call emergency services")
+        XCTAssertTrue(emergencyGuidance?.showsEmergencyWarning ?? false)
+    }
+
     func testMakeReadingBuildsSavableReadingFromValidatedFields() {
         let recordedAt = Date(timeIntervalSince1970: 1234)
         let draft = ReadingEntryDraft(systolicText: "128", diastolicText: "79", pulseText: "64")
