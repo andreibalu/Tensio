@@ -28,11 +28,13 @@
 - Clinical categories: use the American Heart Association patient-facing categories: normal `<120 and <80`, elevated `120-129 and <80`, stage 1 `130-139 or 80-89`, stage 2 `>=140 or >=90`, severe `>180 and/or >120`.
 - Severe reading flow: for `systolic > 180 or diastolic > 120`, show deterministic guidance to wait at least 1 minute, take another reading, ask about emergency symptoms, and show emergency-services guidance if symptoms are present.
 - Severe reading flow implementation detail: preserve an explicit unanswered emergency-symptom state in UI until user responds; never treat an unanswered state as "no symptoms."
+- Severe reading flow implementation detail: keep save actions disabled until the emergency-symptom answer is explicit; a severe reading must not bypass the follow-up branch while symptoms are unanswered.
 - Home monitoring protocol: 2 consecutive measurements at least 1 minute apart, twice daily morning and evening, for at least 4 days and ideally 7 days; discard day 1 when calculating the protocol average shown in reports.
 - Clinical source links for implementers and reviewers:
   - AHA categories and severe guidance: https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
   - NICE HBPM protocol and validated device guidance: https://www.nice.org.uk/guidance/ng136/chapter/recommendations
 - Accessibility: all tappable controls in primary flows must be at least `56x56 pt`, VoiceOver labels must be explicit, Dynamic Type must work through Accessibility 3, and color must never be the only status signal.
+- Accessibility verification: when a change touches Today, Log, Report, Medicines, or Settings, add or update at least one explicit Accessibility 3 smoke path so large-type regressions fail loudly.
 - Visual direction: premium clinical calm, not a generic health app; use the design tokens in "Design System Contract" exactly unless a later reviewed design task changes the token file and screenshots.
 - Non-MVP features: camera scan, Bluetooth sync, AI chat/summaries, caregiver sharing, cloud account sync, multi-user profiles, widgets, and subscriptions.
 - Non-MVP data flows: destructive backup restore UI is post-MVP; MVP includes encrypted backup export and tested backup decoding support only.

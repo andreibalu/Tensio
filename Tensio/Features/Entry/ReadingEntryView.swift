@@ -36,6 +36,18 @@ struct ReadingEntryView: View {
         readingRecords.first?.savedReading
     }
 
+    private var canSaveReading: Bool {
+        draft.validation.canSave && (!showsSymptomsQuestion || warningSymptomsPresent != nil)
+    }
+
+    private var saveHint: String {
+        if showsSymptomsQuestion && warningSymptomsPresent == nil {
+            return "Select whether warning symptoms are present before saving this severe reading."
+        }
+
+        return "Saves this manual reading on device."
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -49,8 +61,8 @@ struct ReadingEntryView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity, minHeight: 56)
-                .disabled(!draft.validation.canSave)
-                .accessibilityHint("Saves this manual reading on device.")
+                .disabled(!canSaveReading)
+                .accessibilityHint(saveHint)
 
                 if let saveErrorMessage {
                     Text(saveErrorMessage)
@@ -168,7 +180,7 @@ struct ReadingEntryView: View {
     }
 
     private func saveReading() {
-        guard let reading = draft.makeReading() else {
+        guard canSaveReading, let reading = draft.makeReading() else {
             return
         }
 
@@ -255,7 +267,7 @@ private struct ReadingValueField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             TextField(title, text: $text)
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.semibold))
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .frame(minHeight: 56)

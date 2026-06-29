@@ -3,6 +3,7 @@ import SwiftUI
 import TensioCore
 
 struct ReportsView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \BPReadingRecord.recordedAt, order: .reverse) private var readingRecords: [BPReadingRecord]
 
     private var summary: ReportSummary {
@@ -58,7 +59,8 @@ struct ReportsView: View {
                 .foregroundStyle(.secondary)
 
             Text(summary.formattedAveragePressure)
-                .font(.system(size: 38, weight: .semibold, design: .rounded))
+                .font(.system(.largeTitle, design: .rounded).weight(.semibold))
+                .monospacedDigit()
 
             Text("\(summary.readingCount) saved reading\(summary.readingCount == 1 ? "" : "s")")
                 .font(.body.weight(.medium))
@@ -119,21 +121,35 @@ struct ReportsView: View {
     }
 
     private func reportRow(title: String, value: String) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(title)
-                .font(.body)
-                .foregroundStyle(.secondary)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(title)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
 
-            Spacer(minLength: 12)
+                    Text(value)
+                        .font(.body.weight(.semibold))
+                        .multilineTextAlignment(.leading)
+                }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(title)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
 
-            Text(value)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
+                    Spacer(minLength: 12)
+
+                    Text(value)
+                        .font(.body.weight(.semibold))
+                        .multilineTextAlignment(.trailing)
+                }
+            }
         }
     }
 
     private func reportCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 10, content: content)
+        VStack(alignment: .leading, spacing: dynamicTypeSize.isAccessibilitySize ? 14 : 10, content: content)
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(uiColor: .secondarySystemBackground))

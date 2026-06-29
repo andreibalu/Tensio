@@ -222,8 +222,8 @@
     <div class="grid" aria-label="Status summary">
       <article class="panel stat">
         <span class="label">Current state</span>
-        <span class="value">Report tab shows first doctor summary</span>
-        <p><code>Tensio</code> now turns saved SwiftData readings into an on-device doctor-summary view with average blood pressure, highest category, latest reading, and stage 2+ count. Today save flow still fails closed if a local write throws.</p>
+        <span class="value">Severe path blocks save until answer</span>
+        <p><code>Tensio</code> now requires an explicit symptom answer before saving a severe reading, shows structured Medicines and Settings holding screens, and scales core entry/report/log copy more safely at Accessibility 3. Report still shows the first on-device doctor summary from saved SwiftData readings.</p>
       </article>
       <article class="panel stat">
         <span class="label">Cadence</span>
@@ -266,6 +266,15 @@
         </thead>
         <tbody>
           <!-- DAILY_LOG_START -->
+          <tr>
+            <td data-label="Date">2026-06-29 (night)</td>
+            <td data-label="Daily plan">Fix any clinical regression in the severe-reading flow first, then finish the overdue Accessibility 3 and placeholder-shell polish across Today, Log, Report, Medicines, and Settings without weakening existing persistence/report coverage.</td>
+            <td data-label="Shipped">Severe readings can no longer bypass the symptom follow-up branch: Save now stays disabled until the user explicitly answers the warning-symptoms question. The app also gained an explicit Accessibility 3 launch mode for UI smoke coverage, scaled numeric styles in Today and Report, roomier Log and Report cards for large type, structured Medicines and Settings holding screens, and privacy copy that now matches the real MVP surface instead of promising Health/export flows that are not built yet.</td>
+            <td data-label="Changed files"><code>Tensio/App/AppRootView.swift</code>, <code>Tensio/App/TensioApp.swift</code>, <code>Tensio/Features/Entry/ReadingEntryView.swift</code>, <code>Tensio/Features/Log/ReadingLogView.swift</code>, <code>Tensio/Features/Report/ReportsView.swift</code>, <code>Tensio/Resources/Localizable.xcstrings</code>, <code>TensioTests/TensioAppSmokeTests.swift</code>, <code>TensioUITests/TensioSmokeUITests.swift</code>, <code>privacy-policy.md</code>, <code>AGENTS.md</code>, <code>docs/superpowers/plans/2026-06-19-tensio-mvp.md</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: serial <code>test_sim -parallel-testing-enabled NO -only-testing:TensioUITests/TensioSmokeUITests/testSevereReadingDisablesSaveUntilSymptomsAnswered -only-testing:TensioTests/TensioAppSmokeTests/testAccessibility3LaunchArgumentUsesAccessibilityDynamicType</code> failed on 2026-06-29 because severe readings still left <code>Save reading</code> enabled before any symptom answer. Green targeted: serial <code>test_sim -parallel-testing-enabled NO -only-testing:TensioTests/TensioAppSmokeTests/testAccessibility3LaunchArgumentUsesAccessibilityDynamicType -only-testing:TensioUITests/TensioSmokeUITests/testSevereReadingDisablesSaveUntilSymptomsAnswered -only-testing:TensioUITests/TensioSmokeUITests/testMedicinesTabShowsStructuredPlaceholderAtAccessibility3 -only-testing:TensioUITests/TensioSmokeUITests/testSettingsTabShowsLocalDataSummaryAtAccessibility3</code> passed 4/4 on 2026-06-29. Full app verification: serial <code>test_sim -parallel-testing-enabled NO</code> passed 15/15 on 2026-06-29. Core regression: unsandboxed <code>swift test</code> passed 13/13 package tests on 2026-06-29 with cache override. Manual UI check: <code>build_run_sim</code> plus simulator screenshot verified Today at forced Accessibility 3 on 2026-06-29.</td>
+            <td data-label="Blockers">No delivery blocker. Biggest remaining product-quality gap is that Report still labels a simple arithmetic mean as <code>Average blood pressure</code>; it does not yet follow the home-monitoring protocol average that discards day 1.</td>
+            <td data-label="Next target">Replace the current simple report average with a protocol-safe monitoring summary, then start real medicines data so Report can combine readings with adherence context.</td>
+          </tr>
           <tr>
             <td data-label="Date">2026-06-29</td>
             <td data-label="Daily plan">Replace Report placeholder with first real doctor-summary screen: compute deterministic reading aggregates from on-device SwiftData records, surface latest/highest/average insights in a senior-readable layout, and lock behavior with core plus app-side tests.</td>

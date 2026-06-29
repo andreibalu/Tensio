@@ -59,6 +59,24 @@ final class TensioSmokeUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS 'chest pain'")).firstMatch.exists)
     }
 
+    func testSevereReadingDisablesSaveUntilSymptomsAnswered() throws {
+        let app = launchApp()
+
+        let systolicField = app.textFields["Systolic"]
+        let diastolicField = app.textFields["Diastolic"]
+
+        XCTAssertTrue(systolicField.waitForExistence(timeout: 5))
+        enter("184", into: systolicField, app: app)
+        enter("121", into: diastolicField, app: app)
+
+        XCTAssertTrue(app.staticTexts["Warning symptoms right now?"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["Save reading"].isEnabled)
+
+        app.buttons["No warning symptoms"].tap()
+
+        XCTAssertTrue(app.buttons["Save reading"].isEnabled)
+    }
+
     func testSaveFailureShowsErrorAndKeepsEnteredReading() throws {
         let app = launchApp(arguments: ["UITestForceReadingSaveFailure"])
 
@@ -104,5 +122,25 @@ final class TensioSmokeUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Average blood pressure"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["128 / 79 mmHg"].exists)
         XCTAssertTrue(app.staticTexts["Elevated"].exists)
+    }
+
+    func testMedicinesTabShowsStructuredPlaceholderAtAccessibility3() throws {
+        let app = launchApp(arguments: ["UITestAccessibility3"])
+
+        app.tabBars.buttons["Medicines"].tap()
+
+        XCTAssertTrue(app.staticTexts["Medicine routine"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Track medicine names, dose times, and taken or missed doses in a later update."].exists)
+        XCTAssertTrue(app.staticTexts["For now, bring your paper list or clinician handout with this blood pressure log."].exists)
+    }
+
+    func testSettingsTabShowsLocalDataSummaryAtAccessibility3() throws {
+        let app = launchApp(arguments: ["UITestAccessibility3"])
+
+        app.tabBars.buttons["Settings"].tap()
+
+        XCTAssertTrue(app.staticTexts["Privacy and support"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Blood pressure readings stay on this iPhone. Tensio uses no account and no analytics in MVP."].exists)
+        XCTAssertTrue(app.staticTexts["Export, backup, and Health settings arrive in later updates."].exists)
     }
 }

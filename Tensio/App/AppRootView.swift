@@ -29,30 +29,73 @@ struct AppRootView: View {
             ReadingLogView()
         case .medicines:
             placeholder(
-                title: "Medicines",
-                body: "Medicine tracking comes next."
+                title: "Medicine routine",
+                summary: "Medicine tracking is not in this build yet.",
+                sections: [
+                    PlaceholderSection(
+                        title: "Planned next",
+                        body: "Track medicine names, dose times, and taken or missed doses in a later update."
+                    ),
+                    PlaceholderSection(
+                        title: "Bring now",
+                        body: "For now, bring your paper list or clinician handout with this blood pressure log."
+                    )
+                ]
             )
         case .report:
             ReportsView()
         case .settings:
             placeholder(
-                title: "Settings",
-                body: "Local-first, no-account defaults."
+                title: "Privacy and support",
+                summary: "This MVP keeps readings local on this iPhone.",
+                sections: [
+                    PlaceholderSection(
+                        title: "Current build",
+                        body: "Blood pressure readings stay on this iPhone. Tensio uses no account and no analytics in MVP."
+                    ),
+                    PlaceholderSection(
+                        title: "Coming later",
+                        body: "Export, backup, and Health settings arrive in later updates."
+                    )
+                ]
             )
         }
     }
 
-    private func placeholder(title: LocalizedStringKey, body: LocalizedStringKey) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .font(.largeTitle.weight(.semibold))
+    private func placeholder(
+        title: String,
+        summary: String,
+        sections: [PlaceholderSection]
+    ) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(title)
+                    .font(.largeTitle.weight(.semibold))
+                    .accessibilityAddTraits(.isHeader)
 
-            Text(body)
-                .font(.body)
-                .foregroundStyle(.secondary)
+                Text(summary)
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+
+                ForEach(sections) { section in
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(section.title)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+
+                        Text(section.body)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(18)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(20)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(24)
         .navigationTitle(title)
     }
 
@@ -63,6 +106,18 @@ struct AppRootView: View {
         }
 
         return SwiftDataReadingSaver()
+    }
+}
+
+private struct PlaceholderSection: Identifiable {
+    let id: String
+    let title: String
+    let body: String
+
+    init(title: String, body: String) {
+        self.id = "\(title)-\(body)"
+        self.title = title
+        self.body = body
     }
 }
 
