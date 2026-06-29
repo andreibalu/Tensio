@@ -21,6 +21,7 @@
 - Day-zero repo assets: Task 1 must create `VERSION`, `agents.md`, `support.md`, `privacy-policy.md`, `EULA.md`, `Tensio/Resources/PrivacyInfo.xcprivacy`, and `ci_scripts/ci_post_clone.sh`.
 - Privacy docs: any later change to permissions, HealthKit, backup, networking, subscriptions, or data storage must update `privacy-policy.md`, `support.md`, `EULA.md`, `PrivacyInfo.xcprivacy`, and `agents.md` in the same commit.
 - SwiftData future sync: do not use `@Attribute(.unique)` on models; define explicit relationship inverses; in-memory test containers must use `cloudKitDatabase: .none`; fields added after the first TestFlight build must use nullable backing storage with a computed non-optional accessor.
+- Manual-entry persistence must fail closed: if a local save throws, keep entered values visible and surface retry guidance; never clear a reading draft before successful save.
 - Architecture style: use lightweight MVVM; views own `@Query`, `@AppStorage`, and UI state; `@MainActor @Observable` view models own async workflows; services are protocol typed with default concrete implementations and test mocks.
 - Medical safety: Tensio logs, explains, and shares readings from external blood pressure monitors; it must never claim to measure blood pressure using the phone alone.
 - Medical safety: Tensio must not diagnose hypertension, prescribe treatment, or advise starting, stopping, or changing medication.

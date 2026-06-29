@@ -1,12 +1,18 @@
+import SwiftData
 import SwiftUI
 import TensioCore
 
 struct ReadingEntryView: View {
-    let latestSavedReading: SavedReading?
-    let onSave: (BloodPressureReading) -> Void
-
+    private let readingSaver: any ReadingSaving
     @State private var draft = ReadingEntryDraft()
     @State private var warningSymptomsPresent: Bool?
+    @State private var saveErrorMessage: String?
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \BPReadingRecord.recordedAt, order: .reverse) private var readingRecords: [BPReadingRecord]
+
+    init(readingSaver: any ReadingSaving = SwiftDataReadingSaver()) {
+        self.readingSaver = readingSaver
+    }
 
     private var reading: BloodPressureReading? {
         draft.makeReading()
@@ -26,6 +32,10 @@ struct ReadingEntryView: View {
         reading?.category == .severe
     }
 
+    private var latestSavedReading: SavedReading? {
+        readingRecords.first?.savedReading
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -42,6 +52,13 @@ struct ReadingEntryView: View {
                 .disabled(!draft.validation.canSave)
                 .accessibilityHint("Saves this manual reading on device.")
 
+                if let saveErrorMessage {
+                    Text(saveErrorMessage)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .accessibilityLabel(saveErrorMessage)
+                }
+
                 if let latestSavedReading {
                     latestReadingCard(latestSavedReading)
                 }
@@ -53,6 +70,9 @@ struct ReadingEntryView: View {
             if !isSevere {
                 warningSymptomsPresent = nil
             }
+        }
+        .onChange(of: draft) { _, _ in
+            saveErrorMessage = nil
         }
     }
 
@@ -152,9 +172,14 @@ struct ReadingEntryView: View {
             return
         }
 
-        onSave(reading)
-        draft = ReadingEntryDraft()
-        warningSymptomsPresent = nil
+        do {
+            try readingSaver.save(reading, in: modelContext)
+            draft = ReadingEntryDraft()
+            warningSymptomsPresent = nil
+            saveErrorMessage = nil
+        } catch {
+            saveErrorMessage = "Couldn't save reading on this iPhone right now. Check storage and try again."
+        }
     }
 
     private var symptomQuestionBlock: some View {
@@ -247,6 +272,7 @@ private struct ReadingValueField: View {
 
 #Preview {
     NavigationStack {
-        ReadingEntryView(latestSavedReading: nil) { _ in }
+        ReadingEntryView()
     }
+    .modelContainer(for: BPReadingRecord.self, inMemory: true)
 }

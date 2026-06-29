@@ -222,8 +222,8 @@
     <div class="grid" aria-label="Status summary">
       <article class="panel stat">
         <span class="label">Current state</span>
-        <span class="value">Manual entry flow asks explicit severe follow-up</span>
-        <p><code>Tensio</code> now has real large-number entry UI, explicit severe-reading symptom follow-up, and on-device recent reading persistence on top of <code>TensioCore</code>.</p>
+        <span class="value">Report tab shows first doctor summary</span>
+        <p><code>Tensio</code> now turns saved SwiftData readings into an on-device doctor-summary view with average blood pressure, highest category, latest reading, and stage 2+ count. Today save flow still fails closed if a local write throws.</p>
       </article>
       <article class="panel stat">
         <span class="label">Cadence</span>
@@ -266,6 +266,33 @@
         </thead>
         <tbody>
           <!-- DAILY_LOG_START -->
+          <tr>
+            <td data-label="Date">2026-06-29</td>
+            <td data-label="Daily plan">Replace Report placeholder with first real doctor-summary screen: compute deterministic reading aggregates from on-device SwiftData records, surface latest/highest/average insights in a senior-readable layout, and lock behavior with core plus app-side tests.</td>
+            <td data-label="Shipped">Report tab is no longer placeholder copy. Tensio now builds a deterministic on-device doctor summary from saved readings: average blood pressure, highest category reached, latest reading details, stage 2-or-higher count, and visit-safe reminder copy that Tensio logs cuff readings only. Empty state and saved-reading state both render in the report flow.</td>
+            <td data-label="Changed files"><code>Sources/TensioCore/ReportSummary.swift</code>, <code>Tests/TensioCoreTests/ReportSummaryTests.swift</code>, <code>Tensio/Features/Report/ReportsView.swift</code>, <code>Tensio/App/AppRootView.swift</code>, <code>Tensio/Persistence/BPReadingRecord.swift</code>, <code>TensioTests/PersistenceTests.swift</code>, <code>TensioUITests/TensioSmokeUITests.swift</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: unsandboxed <code>swift test --filter ReportSummaryTests</code> failed on 2026-06-29 because <code>ReportSummary</code> did not exist. Green: same command passed 2/2 after implementation. Full core verification: unsandboxed <code>swift test</code> passed 13/13 on 2026-06-29. App integration: <code>xcodebuild test -project Tensio.xcodeproj -scheme Tensio -destination id=0A533A4E-7B59-448C-AA0B-1FF429EA79B8 -parallel-testing-enabled NO -skip-testing:TensioUITests</code> passed 5/5 on 2026-06-29. UI smoke: targeted <code>xcodebuild test</code> runs for <code>testReportTabShowsEmptyStateWithoutSavedReadings</code> and <code>testReportTabShowsSummaryAfterSavingReading</code> both passed on cached simulator <code>iphone15PRO_IOS18</code> on 2026-06-29.</td>
+            <td data-label="Blockers">Private preview still blocked as required. Final publish command on 2026-06-29: <code>python3 /Users/andreibalu/.agents/skills/away-preview/scripts/publish-tailscale-preview.py /Users/andreibalu/CODE/xcode/Tensio/progress.html --port 8765 --state-dir /tmp/tensio-progress-preview</code> exited with <code>Tailscale unavailable. Refusing public tunnel fallback.</code> Install/sign into Tailscale on Mac and phone, then start local daemon before next run.</td>
+            <td data-label="Next target">Turn report summary into real share output: generate doctor-summary PDF plus CSV export from the new deterministic aggregates, then start pulling medicines into report context.</td>
+          </tr>
+          <tr>
+            <td data-label="Date">2026-06-28 (night)</td>
+            <td data-label="Daily plan">Harden the new SwiftData reading-save path so failed local writes do not silently erase manual entries, then lock the behavior in with targeted tests and deterministic UI-test storage.</td>
+            <td data-label="Shipped">Today save flow now goes through a dedicated reading saver and fails closed: if SwiftData save throws, Tensio keeps the entered reading visible and shows inline retry guidance instead of silently clearing the draft. UI smoke tests now launch with an in-memory store and cover forced save failure, so persistence regressions do not hide behind reused simulator data.</td>
+            <td data-label="Changed files"><code>Tensio/Persistence/ReadingSaver.swift</code>, <code>Tensio/App/AppRootView.swift</code>, <code>Tensio/App/TensioApp.swift</code>, <code>Tensio/Features/Entry/ReadingEntryView.swift</code>, <code>TensioTests/PersistenceTests.swift</code>, <code>TensioUITests/TensioSmokeUITests.swift</code>, <code>privacy-policy.md</code>, <code>AGENTS.md</code>, <code>docs/superpowers/plans/2026-06-19-tensio-mvp.md</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>test_sim -parallel-testing-enabled NO -only-testing:TensioTests/PersistenceTests/testSwiftDataReadingSaverPersistsRecord -only-testing:TensioUITests/TensioSmokeUITests/testSaveFailureShowsErrorAndKeepsEnteredReading</code> failed on 2026-06-28 because <code>SwiftDataReadingSaver</code> did not exist. Green: same targeted simulator run passed 2/2 on 2026-06-28 after the fix. Core regression: unsandboxed <code>swift test</code> passed 11/11 package tests on 2026-06-28 with cache override. Full app verification: <code>test_sim -parallel-testing-enabled NO</code> passed 8/8 simulator tests on 2026-06-28.</td>
+            <td data-label="Blockers">No new functional blocker. Accessibility 3 polish is still open in entry-field typography and non-core placeholder tabs.</td>
+            <td data-label="Next target">Make Today plus placeholder tabs fully Accessibility 3-safe, then build log summaries/report-ready aggregates on top of persisted readings.</td>
+          </tr>
+          <tr>
+            <td data-label="Date">2026-06-28</td>
+            <td data-label="Daily plan">Replace temporary <code>UserDefaults</code> reading history with SwiftData-backed on-device persistence, wire Today + Log to real local records, and refresh privacy/support copy for storage wording.</td>
+            <td data-label="Shipped">Manual-entry readings now save into an on-device SwiftData store instead of temporary <code>UserDefaults</code> JSON. Today and Log read from live SwiftData queries, so latest reading cards and history lists stay aligned with durable local records that can support later report work.</td>
+            <td data-label="Changed files"><code>Tensio/Persistence/BPReadingRecord.swift</code>, <code>Tensio/Persistence/TensioModelContainer.swift</code>, <code>Tensio/App/TensioApp.swift</code>, <code>Tensio/App/AppRootView.swift</code>, <code>Tensio/Features/Entry/ReadingEntryView.swift</code>, <code>Tensio/Features/Log/ReadingLogView.swift</code>, <code>TensioTests/PersistenceTests.swift</code>, <code>Tensio/Resources/PrivacyInfo.xcprivacy</code>, <code>privacy-policy.md</code>, <code>support.md</code>, <code>EULA.md</code>, <code>progress.html</code>.</td>
+            <td data-label="Verification">Red: <code>test_sim -parallel-testing-enabled NO -only-testing:TensioTests/PersistenceTests</code> failed on 2026-06-28 because <code>TensioModelContainer</code> and <code>BPReadingRecord</code> did not exist. Green: same targeted simulator test passed 1/1 on 2026-06-28 after SwiftData implementation. Full app verification: <code>test_sim -parallel-testing-enabled NO</code> passed 6/6 simulator tests on 2026-06-28, including Today-flow UI smoke coverage.</td>
+            <td data-label="Blockers">Private preview still blocked as required: <code>python3 /Users/andreibalu/.agents/skills/away-preview/scripts/publish-tailscale-preview.py /Users/andreibalu/CODE/xcode/Tensio/progress.html --port 8765 --state-dir /tmp/tensio-progress-preview</code> exited on 2026-06-28 with <code>Tailscale unavailable. Refusing public tunnel fallback.</code> Install/sign into Tailscale on Mac and phone, then start local daemon before next run.</td>
+            <td data-label="Next target">Build richer Log/Report foundations on top of persisted SwiftData records: averages, trend summaries, and doctor-ready export inputs.</td>
+          </tr>
           <tr>
             <td data-label="Date">2026-06-27 (night)</td>
             <td data-label="Daily plan">Fix severe-reading symptom flow so Tensio does not assume “no warning symptoms” before user answers, then verify app behavior with targeted tests and simulator checks.</td>
@@ -346,6 +373,11 @@
           <tr>
             <td data-label="Priority">P1</td>
             <td data-label="Candidate">Replace temporary on-device reading persistence with SwiftData models and richer log/report foundations.</td>
+            <td data-label="Status"><span class="badge">Done</span></td>
+          </tr>
+          <tr>
+            <td data-label="Priority">P1</td>
+            <td data-label="Candidate">Generate shareable doctor-summary PDF and CSV export from persisted local readings.</td>
             <td data-label="Status"><span class="badge warning">Open</span></td>
           </tr>
           <!-- BACKLOG_END -->

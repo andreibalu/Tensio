@@ -1,7 +1,12 @@
+import SwiftData
 import SwiftUI
 
 struct ReadingLogView: View {
-    let savedReadings: [SavedReading]
+    @Query(sort: \BPReadingRecord.recordedAt, order: .reverse) private var readingRecords: [BPReadingRecord]
+
+    private var savedReadings: [SavedReading] {
+        readingRecords.map(\.savedReading)
+    }
 
     var body: some View {
         List {

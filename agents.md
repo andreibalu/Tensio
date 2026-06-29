@@ -31,5 +31,6 @@ Tensio is a local-first, no-account iOS blood pressure companion for seniors and
 - Services are protocol typed with default concrete implementations.
 - SwiftData models avoid `@Attribute(.unique)` so future CloudKit sync remains possible.
 - Severe-reading follow-up questions in app UI must preserve an explicit unanswered state until user responds; never default emergency-symptom answers to "no" before selection.
+- Manual-entry persistence must fail closed: if a local save throws, keep entered values visible and show retry guidance instead of clearing the draft.
 - UI must support Dynamic Type through Accessibility 3, and primary controls must be at least 56 pt tall.
 - Prefer filesystem-synchronized Xcode groups: app files under `Tensio/`, unit tests under `TensioTests/`, UI tests under `TensioUITests/`.

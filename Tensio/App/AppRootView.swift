@@ -1,8 +1,11 @@
 import SwiftUI
-import TensioCore
 
 struct AppRootView: View {
-    @State private var savedReadings = RecentReadingStore().load()
+    private let readingSaver: any ReadingSaving
+
+    init(readingSaver: (any ReadingSaving)? = nil) {
+        self.readingSaver = readingSaver ?? Self.defaultReadingSaver()
+    }
 
     var body: some View {
         TabView {
@@ -21,21 +24,16 @@ struct AppRootView: View {
     private func content(for tab: MainTab) -> some View {
         switch tab {
         case .today:
-            ReadingEntryView(latestSavedReading: savedReadings.first) { reading in
-                savedReadings = RecentReadingStore().save(reading)
-            }
+            ReadingEntryView(readingSaver: readingSaver)
         case .log:
-            ReadingLogView(savedReadings: savedReadings)
+            ReadingLogView()
         case .medicines:
             placeholder(
                 title: "Medicines",
                 body: "Medicine tracking comes next."
             )
         case .report:
-            placeholder(
-                title: "Report",
-                body: "Doctor-ready summaries come after persisted readings."
-            )
+            ReportsView()
         case .settings:
             placeholder(
                 title: "Settings",
@@ -56,6 +54,15 @@ struct AppRootView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(24)
         .navigationTitle(title)
+    }
+
+    private static func defaultReadingSaver() -> any ReadingSaving {
+        let launchArguments = ProcessInfo.processInfo.arguments
+        if launchArguments.contains("UITestForceReadingSaveFailure") {
+            return FailingReadingSaver()
+        }
+
+        return SwiftDataReadingSaver()
     }
 }
 

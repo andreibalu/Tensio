@@ -1,6 +1,6 @@
 # Tensio Privacy Policy
 
-Tensio is local-first. The MVP stores readings, medicine names, dose logs, reminder preferences, and settings on the user's device.
+Tensio is local-first. The current MVP build stores blood pressure readings in an on-device SwiftData database that stays on the user's iPhone unless the user chooses to export a file.
 
 Tensio does not require an account, does not use an analytics SDK, does not sell data, and does not send readings to a Tensio server.
 
