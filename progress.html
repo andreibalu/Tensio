@@ -347,6 +347,15 @@
             <td data-label="Blockers">None.</td>
             <td data-label="Next target">First scheduled run chooses highest-value Tensio feature from current codebase.</td>
           </tr>
+          <tr>
+            <td data-label="Date">2026-07-01 (night)</td>
+            <td data-label="Daily plan">Audit today&apos;s guided-pair and monitoring work without mixing pre-existing edits, then add the strongest independent persistence guardrail and run full verification.</td>
+            <td data-label="Shipped">Added a file-backed SwiftData migration regression test. It creates the previous readings-only store, reopens the same store with <code>MonitoringSessionRecord</code> in the current schema, proves the existing reading survives, and proves a monitoring session can then be saved. No durable AGENTS or MVP-plan lesson emerged, so both files remain unchanged by this run.</td>
+            <td data-label="Changed files"><code>TensioTests/SchemaMigrationTests.swift</code> plus this nightly row in <code>progress.html</code>. All morning and prior-night edits remain pre-existing and unstaged.</td>
+            <td data-label="Verification">Targeted file-backed migration test passed 1/1. Full <code>swift test</code> passed 21/21. Full serial <code>xcodebuild test</code> passed 14 app tests and 12 UI tests. Final diff and privacy-manifest checks run before delivery.</td>
+            <td data-label="Blockers">Audit found unresolved pre-existing risks: repeated severe readings without symptoms still instruct another retake instead of escalating persistent severe results; severe guidance disappears during the waiting screen; waiting has no cancel path; monitoring averages include unverified manual readings; and <code>ModelContext.rollback()</code> can discard unrelated unsaved main-context edits. These require coordinated fixes in morning-owned files and were not mixed into this run&apos;s commit.</td>
+            <td data-label="Next target">Before shipping the guided-pair slice, add test-first persistent-severe escalation and keep urgent guidance visible through the wait. Then isolate failed saves from unrelated main-context edits and persist pair/period metadata before calling report values protocol averages.</td>
+          </tr>
           <!-- DAILY_LOG_END -->
         </tbody>
       </table>
